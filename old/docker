@@ -1,0 +1,17 @@
+
+	sudo groupadd docker           #添加docker用户组
+	sudo gpasswd -a $USER docker   #将登陆用户加入到docker用户组中
+	newgrp docker                  #更新用户组
+	docker pull python:3.8.2
+	docker images
+	docker ps
+	docker run -it python3.8.2 bin/bash
+	docker commit -a'djx' -m'tornado' containerID tnd-dcr
+	docker run -it -v /tnd:/tnd -p 8001:8001 containerID tnd-dcr bin/bash
+	ctl p q
+	sudo chown -R 1000 tnd         # 给当前登录用户外部卷的权限
+	docker exec -it tnd-dcr bin/bash
+	docker stop ID
+	docker rm -f $(docker ps -aq)  # q是只列出容器ID
+	docker rmi -f $(docker images)
+	

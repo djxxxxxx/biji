@@ -1,0 +1,73 @@
+
+ubuntu远程设置
+
+服务端
+
+sudo apt install xrdp
+
+控制端安装remmina
+
+-----------------------------------------------------------------------------------------
+
+
+ubuntu安装python3.7.4
+
+wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
+
+sudo apt-get update    
+sudo apt-get install gcc patch -y
+sudo apt-get install libreadline-dev -y    
+sudo apt-get install libmysqlclient-dev libffi-dev libssl-dev openssl zlib1g-dev libsqlite3-dev tk-dev build-essential python-dev python-setuptools python-pip python-smbus libncursesw5-dev libgdbm-dev libc6-dev -y
+
+tar -xzf xxxxxx.tgz
+
+./configure --prefix=/opt/python37
+
+make
+
+make install
+
+默认python
+sudo mv /usr/bin/python /usr/bin/python.bak
+sudo ln -s /opt/python37/bin/python3.7 /usr/bin/python
+
+默认pip
+sudo mv /usr/bin/pip /usr/bin/pip.bak
+sudo ln -s /opt/python37/bin/pip3 /usr/bin/pip
+
+或者
+
+Add python3.6 & python3.7 to update-alternatives
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2
+
+Update python3 to point to python3.7
+sudo update-alternatives --config python3
+Enter 2 for python3.7
+
+-------------------------------------------------------------------------------------
+
+腾讯云win10 DNS
+
+183.60.83.19
+183.60.82.98
+
+-------------------------------------------------------------------------------------
+
+django部署ubuntu数据库MYSQL时区问题
+
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root(debian-sys-maint) -p mysql
+
+-------------------------------------------------------------------------------------
+
+github urls
+
+mysite   https://github.com/dujiaxing689/mysite.git
+
+Notes    https://github.com/dujiaxing689/Notes.git
+
+-------------------------------------------------------------------------------------
+
+
+
+

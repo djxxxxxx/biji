@@ -1,0 +1,61 @@
+1.安装环境
+安装gcc等依赖
+yum install gcc-c++ pcre pcre-devel zlib zlib-devel openssl openssl-devel -y
+
+2.下载安装
+直接下载.tar.gz安装包，地址：https://nginx.org/en/download.html
+或使用wget下载
+wget -c https://nginx.org/download/nginx-1.18.0.tar.gz
+解压
+tar -zxvf nginx-1.10.1.tar.gz
+cd nginx-1.10.1
+使用默认配置
+./configure
+编译安装
+make
+make install
+启动、停止nginx
+cd /usr/local/nginx/sbin/
+./nginx 
+./nginx -s stop
+./nginx -s quit
+./nginx -s reload
+
+./nginx -s quit:此方式停止步骤是待nginx进程处理任务完毕进行停止。
+./nginx -s stop:此方式相当于先查出nginx进程id再使用kill命令强制杀掉进程。
+
+重启nginx
+先停止再启动（推荐）
+对 nginx 进行重启相当于先停止再启动，即先执行停止命令再执行启动命令。如下：
+./nginx -s quit
+./nginx
+重新加载配置文件
+当 ngin x的配置文件 nginx.conf 修改后，要想让配置生效需要重启 nginx，使用-s reload不用先停止 ngin x再启动 nginx 即可将配置信息在 nginx 中生效，如下：
+./nginx -s reload
+
+配置文件在/usr/local/nginx/conf/
+
+参考自 https://www.cnblogs.com/kaid/p/7640723.html
+
+以上安装的nginx没有ssl模块，只用http的话不用改
+如使用https需添加ssl模块
+先停止nginx
+./nginx -s quit
+查看nginx原有的模块
+/usr/local/nginx/sbin/nginx -V
+在configure arguments:后面显示的原有的configure参数如下：
+--prefix=/usr/local/nginx --with-http_stub_status_module
+那么我们的新配置信息就应该这样写：
+./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module
+运行上面的命令即可，等配置完成后运行命令
+make
+这里不要进行make install，否则就是覆盖安装
+然后备份原有已安装好的nginx
+cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
+然后将刚刚编译好的nginx覆盖掉原有的nginx（这个时候nginx要停止状态）
+cp ./objs/nginx /usr/local/nginx/sbin/
+然后启动nginx，仍可以通过命令查看是否已经加入成功
+/usr/local/nginx/sbin/nginx -V
+成功后就可以在配置文件中使用ssl了
+
+参考自 https://www.cnblogs.com/ghjbk/p/6744131.html

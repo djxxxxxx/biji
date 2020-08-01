@@ -1,0 +1,227 @@
+
+install python3.7.4
+
+Step 1 – Requirements
+This Python installation required the GCC compiler on your system. Login to your server using ssh or shell access. Now, use the following command to install prerequisites for Python before installing it.
+
+yum install gcc openssl-devel bzip2-devel libffi-devel
+
+Step 2 – Download Python 3.7
+Download Python using the following command from the Python official site. You can also download the latest version in place of specified below.
+
+cd /usr/src
+wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
+Now extract the downloaded package.
+
+tar xzf Python-3.7.4.tgz
+Step 3 – Install Python 3.7
+Use below set of commands to compile Python source code on your system using altinstall.
+
+cd Python-3.7.4
+./configure --enable-optimizations
+make altinstall
+make altinstall is used to prevent replacing the default python binary file /usr/bin/python.
+
+Now remove downloaded source archive file from your system
+
+rm /usr/src/Python-3.7.4.tgz
+Step 4 – Check Python Version
+Check the latest version installed of python. Use command python3.7 instead of just python.
+
+python3.7 -V
+
+Python 3.7.4
+
+pip3.7 -V
+
+----------------------------------------------------------------------------
+
+安装测试uwsgi
+
+pip3.7 install uwsgi
+
+测试 uwsgi 是否正常：
+新建 test.py 文件，内容如下：
+def application(env, start_response):
+    start_response('200 OK', [('Content-Type','text/html')])
+    return [b"Hello World"]
+
+然后在终端运行：
+uwsgi --http :8001 --wsgi-file test.py
+注意：需要开启端口才可以正常访问
+
+
+3、可以用uwsgi的http协议访问django写的网站
+执行如下命令可以测试自己的项目
+uwsgi --http :8001 --chdir /home/mysite --home /home/mysite_env --module mysite.wsgi:application
+
+----------------------------------------------------------------------------
+安装mysql
+
+在CentOS中默认安装有MariaDB，这个是MySQL的分支，但为了需要，还是要在系统中安装MySQL，而且安装完成之后可以直接覆盖掉MariaDB。
+
+1 下载并安装MySQL官方的 Yum Repository
+[root@localhost ~]# wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+  使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子，然后就可以直接yum安装了。
+
+[root@localhost ~]# yum -y install mysql57-community-release-el7-10.noarch.rpm
+  之后就开始安装MySQL服务器。
+
+[root@localhost ~]# yum -y install mysql-community-server
+
+至此MySQL就安装完成了，然后是对MySQL的一些设置。
+
+2 MySQL数据库设置
+  首先启动MySQL
+
+[root@localhost ~]# systemctl start  mysqld.service
+  查看MySQL运行状态，运行状态如图：
+
+[root@localhost ~]# systemctl status mysqld.service
+
+ 此时MySQL已经开始正常运行，不过要想进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：
+
+[root@localhost ~]# grep "password" /var/log/mysqld.log
+
+如下命令进入数据库：
+
+[root@localhost ~]# mysql -uroot -p
+  输入初始密码，此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：
+
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
+
+此时才算真的完成了。
+
+django部署ubuntu数据库MYSQL时区问题
+
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root(debian-sys-maint) -p mysql
+
+
+-------------------------------------------------------------------------
+
+安装项目环境
+env
+	pip3.7 install django
+	pip3.7 install django-ckeditor
+	pip3.7 install pillow
+
+yum install mysql-devel gcc gcc-devel python-devel
+
+env	
+	pip install mysqlclient
+
+-------------------------------------------------------------------------
+
+Mysql操作
+
+创建database
+create database mysite_db default charset=utf8mb4 default collate utf8mb4_unicode_ci;
+
+创建用户
+create user 'djx'@'localhost' identified by 'djx123456';
+
+给用户权限
+grant all privileges on nysite_db.* to 'djx'@'localhost';
+
+刷新
+flush privileges;
+
+出现my_cache_table does't exist
+python manage.py createcachetable
+
+-------------------------------------------------------------------------
+
+django导数据
+
+安装mysqlclient
+pip install mysqlclient
+
+python manage.py dumpdata > data.json(sql)
+python manage.py loaddata data.json
+
+服务器
+use mysite_db
+source data.json(sql)
+
+-------------------------------------------------------------------------
+
+nginx安装配置
+
+centos7及以上直接yum安装新版本
+sudo yum -y install nginx
+
+cd /etc/nginx/
+sudo vim nginx.conf
+
+内容：
+
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user root;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80;
+        server_name  localhost;
+
+
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+        charset utf-8;
+
+        client_max_body_size 75M;
+        location /static {
+            alias /home/djx/mysite/static;
+        }
+
+        location /media {
+            alias /home/djx/mysite/media;
+        }
+
+        location / {
+            include uwsgi_params;
+	    uwsgi_pass 127.0.0.1:8001;
+            uwsgi_read_timeout 30;
+        }
+    }
+service nginx restart
+
+

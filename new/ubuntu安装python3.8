@@ -1,0 +1,16 @@
+一、下载解压
+wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz
+tar zxvf Py*
+cd Py*
+二、安装依赖
+sudo apt-get install python-dev libffi-dev libssl-dev -y
+四.编译安装
+./configure --enable-optimizations
+ make
+ make altinstall
+五.配置环境变量及创建快捷方式
+sudo mv /usr/bin/python3 /usr/bin/python3.bak
+sudo ln -s /usr/local/bin/python3.8 /usr/bin/python3
+sudo ln -s /usr/local/bin/pip3.8 /usr/bin/pip3
+如果pip安装出现错误
+sudo rm /usr/bin/lsb_release

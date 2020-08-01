@@ -1,0 +1,47 @@
+1.PostgreSQL官网下载压缩包
+wget https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.gz
+2.安装依赖
+sudo apt-get install libreadline-dev zlib1g-dev gcc -y
+3.解压安装
+tar zxvf postgresql-12.3.tar.gz
+cd postgresql-12.3
+./configure --prefix=/opt/postgresql12
+make
+sudo make install
+看到PostgreSQL installation complete.说明安装成功。
+4、root下创建postgres用户和数据目录，并修改权限
+adduser postgres
+mkdir -p /opt/postgresql12/data
+chown -R postgres.postgres /opt/postgresql12/data
+chmod -R go-rwx /opt/postgresql12/data
+5、添加路径到文件
+su - postgres
+nano ~/.bashrc
+将下面路径添加到文件中
+export PATH=/opt/postgresql12/bin:$PATH
+export PGDATA=/opt/postgresql12/data
+export PGHOME=/opt/postgresql12
+export LANG=zh_CN.UTF-8
+export PGPORT=5432
+终端输入
+source ~/.bashrc
+6、初始化数据库，启动，进入
+initdb -D /opt/postgresql12/data --locale=zh_CN.UTF8
+如果zb_CN.UTF8有问题运行下一条命令重新安装中文语言包
+sudo apt-get -y install language-pack-zh-hans
+pg_ctl start -D /opt/postgresql12/data
+psql -h localhost -U test_user -d test_db
+控制台命令: \后加命令
+h：查看SQL命令的解释，比如h select。
+?：查看psql命令列表。
+l：列出所有数据库。
+c [database_name]：连接其他数据库。
+d：列出当前数据库的所有表格。
+d [table_name]：列出某一张表格的结构。
+du：列出所有用户。
+e：打开文本编辑器。
+conninfo：列出当前数据库和连接的信息。
+
+
+转自 https://blog.csdn.net/Mackyi/article/details/80374610
+

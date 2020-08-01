@@ -1,0 +1,35 @@
+
+Mysql操作
+
+创建database
+create database mysite_db default charset=utf8mb4 default collate utf8mb4_unicode_ci;
+
+创建用户
+create user 'djx'@'localhost' identified by 'djx123456';
+
+给用户权限
+grant all privileges on nysite_db.* to 'djx'@'localhost';
+
+刷新
+flush privileges;
+
+出现my_cache_table does't exist
+python manage.py createcachetable
+
+------------------------------------------------------------------------------
+
+django导数据
+
+安装mysqlclient
+pip install mysqlclient
+
+python manage.py dumpdata > data.json(sql)
+python manage.py loaddata data.json
+
+服务器
+use mysite_db
+source data.json(sql)
+
+django部署ubuntu数据库MYSQL时区问题
+
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root(debian-sys-maint) -p mysql

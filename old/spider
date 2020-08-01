@@ -1,0 +1,11 @@
+用selenium调用phantomjs浏览器的方式几乎可以爬取任何网站，但是与调用chrome相比，phantomjs的稳定性还是不够。如果能让chrome不显示界面，默默地后台运行，就再好不过了。
+
+chome59以上版本对应的Chromedriver可以支持headless模式，使用方法如下：
+
+
+from selenium import  webdriver
+from selenium.webdriver.chrome.options import Options
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+driver = webdriver.Chrome('/usr/bin/chromedriver',chrome_options = chrome_options)
+driver.get('https://www.baidu.com')

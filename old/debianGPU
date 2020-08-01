@@ -1,0 +1,11 @@
+
+
+检测你的NVIDIA显卡型号和推荐的驱动程序的模型
+
+ubuntu-drivers devices
+
+然后输入这个命令
+
+sudo ubuntu-drivers autoinstall
+
+重启

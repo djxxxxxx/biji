@@ -1,0 +1,111 @@
+一、安装依赖库
+更新源
+
+sudo apt-get update
+
+安装c++依赖库
+
+sudo apt-get install build-essential
+sudo apt-get install libtool
+
+安装openssl依赖库
+
+sudo apt-get install openssl
+
+安装pcre依赖库
+
+sudo apt-get install libpcre3 libpcre3-dev
+
+安装zlib依赖库
+
+sudo apt install zlib1g-dev 
+
+二、编译安装Nginx
+下面的配置、编译、安装步骤需要root权限执行
+
+下载nginx 1.81版本
+
+wget http://nginx.org/download/nginx-1.18.0.tar.gz
+
+解压并进入目录
+
+tar -zxvf nginx-1.11.3.tar.gz
+
+cd nginx-1.11.3
+
+ 配置，将nginx安装到/usr/local/ngnix目录,
+
+./configure --prefix=/usr/local/nginx 
+
+ 编译，如果出错，请看这篇：Nginx编译问题解决办法
+
+make
+
+安装
+
+make install 
+
+三、测试是否安装成功
+ 执行下面命令启动nginx（root用户执行）
+
+/usr/local/nginx/sbin/nginx 
+
+查看是否有nginx进程启动，有进程启动，说明安装成功了
+
+ps -ef | grep nginx
+
+四、Nginx常用命令 
+启动服务
+
+/usr/local/nginx/sbin/nginx 
+
+停止服务 
+
+/usr/local/nginx/sbin/nginx  -s stop
+
+重新加载配置
+
+ /usr/local/nginx/sbin/nginx  -s reload
+
+测试配置文件是否正确
+
+ /usr/local/nginx/sbin/nginx -t
+
+五、反向代理负载均衡配置
+Nginx作为负载均衡策略有轮询、ip hash、权重等方式
+
+下面给出一个配置示例，修改conf/nginx.conf文件，默认是轮询策略
+
+worker_processes  1;
+ 
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+ 
+    sendfile        on;
+ 
+    keepalive_timeout  65;
+ 
+    upstream web{
+        #ip_hash;
+        server 192.168.43.31:8080;
+    }
+
+    server {
+        listen 80;
+        server_name  wzj.test.com;
+ 
+        location / {
+ 
+            proxy_set_header   Host             $host;
+            proxy_set_header   X-Real-IP        $remote_addr;
+            proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+            proxy_pass  http://web;
+        }
+   }
+
+
+参考 https://blog.csdn.net/u010889616/article/details/82870076

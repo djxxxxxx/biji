@@ -1,0 +1,12 @@
+删除桌面ie图标，删除注册表
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
+\Desktop\NameSpace\{B416D21B-3B22-B6D4-BBD3-BBD452DB3D5B}]@="WindowsMedia"
+
+windows 系统下 tornado 使用 使用 SelectorEventLoop
+
+import platform
+
+if platform.system() == "Windows":
+    import asyncio
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+

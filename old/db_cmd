@@ -1,0 +1,11 @@
+create database itcast default character set utf8;
+
+use itcast;
+
+create table it_user_info(
+	ui_user_id bigint auto_increment comment '用户ID',
+	ui_name varchar(64) not null comment '用户名',
+	ui_passwd varchar(128) not null comment '密码',
+	ui_age int null,
+	ui_gender tinyint  
+)

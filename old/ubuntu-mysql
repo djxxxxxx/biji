@@ -1,0 +1,46 @@
+Ubuntu 18.04 安装 MySQL 8.0 教程
+
+下载MySQL配置文件，网址：https://dev.mysql.com/downloads/repo/apt/ 
+进入下载文件目录，打开终端，执行命令：sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
+选择MySQL-8.0 点击OK继续安装
+执行更新命令：sudo apt update
+安装MySQL 8.0，执行命令：sudo apt install mysql-server
+设置root密码,确认密码
+阅读配置MySQ社区服务器，翻到末尾点使用Tab键选中<ok>按钮，击Enter键
+加密方式选择Retain MySQL 5.x Compatibility
+登录MySQL ：mysql –u root –p
+查看MySQL字符集，MySQL-8.0字符集默认为UTF-8，执行命令：show variables like '%char%';
+修改数据库配置 允许其他设备访问
+登录mysql服务器，执行以下命令
+选择mysql数据库:use mysql; 
+更改host值:update user set host = ‘%’ where user =’root’; 
+刷新:flush privileges; 
+退出:exit
+
+启动mysql数据库
+
+1、使用 service 启动：service mysql start
+2、使用 mysqld 脚本启动：/etc/inint.d/mysql start
+3、使用 safe_mysqld 启动：safe_mysql&
+
+重启
+
+1、使用 service 启动：service mysql restart
+2、使用 mysqld 脚本启动：/etc/inint.d/mysql restart
+
+关闭
+
+1、使用 service 启动：service mysql stop
+2、使用 mysqld 脚本启动：/etc/inint.d/mysql stop
+3、 mysqladmin shutdown 
+
+删除 MySQL
+
+sudo apt-get autoremove mysql-server
+
+清理残留数据
+
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+————————————————
+版权声明：本文为CSDN博主「壹念メ婲開」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/wm609972715/article/details/83759266

@@ -1,0 +1,26 @@
+一.下载安装包
+wget https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tar.xz
+二.解压文件
+tar -xvJf  Python-3.8.0a1.tar.xz
+cd Python-3.8.0a1
+三.安装依赖
+yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make libffi-devel -y
+四.编译安装
+./configure --enable-optimizations
+ make
+ make altinstall
+
+五.配置环境变量及创建快捷方式
+[root@localhost bin]# echo "/usr/local/lib" > /etc/ld.so.conf.d/python3.8.conf
+[root@localhost bin]# ln -s /usr/local/bin/python3.8 python
+[root@localhost bin]# mv ~/.profile ~/.profile.bak
+[root@localhost bin]# vi ~/.profile
+​
+​
+​
+export LD_LIBRARY_PATH="/usr/local/lib"
+alias python="/usr/local/bin/python3.8"
+alias python3.8="/usr/local/bin/python3.8"
+​
+​
+[root@localhost bin]# source ~/.profile
